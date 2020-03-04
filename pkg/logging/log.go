@@ -30,8 +30,12 @@ const (
 )
 
 func Setup() {
+	var err error
 	filePath := getLogFileFullPath()
-	F = openLogFile(filePath)
+	F, err = openLogFile(filePath)
+	if err != nil {
+		log.Fatalln(err)
+	}
 
 	logger = log.New(F, DefaultPrefix, log.LstdFlags)
 }

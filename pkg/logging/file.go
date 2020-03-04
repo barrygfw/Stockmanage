@@ -2,8 +2,8 @@ package logging
 
 import (
 	"fmt"
+	"graduationProjectPeng/pkg/file"
 	"graduationProjectPeng/pkg/setting"
-	"log"
 	"os"
 	"time"
 )
@@ -18,26 +18,21 @@ func getLogFileFullPath() string {
 	return fmt.Sprintf("%s%s", prefixPath, suffixPath)
 }
 
-func openLogFile(filePath string) *os.File {
-	_, err := os.Stat(filePath)
-	switch {
-	case os.IsNotExist(err):
-		mkdir()
-	case os.IsPermission(err):
-		log.Fatalf("Permission :%v", err)
-	}
-	handle, err := os.OpenFile(filePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		log.Fatalf("Fail to OpenFile :%v", err)
+func openLogFile(filePath string) (*os.File, error) {
+	perm := file.CheckPermission(filePath)
+	if perm == true {
+		return nil, fmt.Errorf("file.CheckPermission Permission denied src: $s", filePath)
 	}
 
-	return handle
-}
-
-func mkdir() {
-	dir, _ := os.Getwd()
-	err := os.MkdirAll(dir+"/"+getLogFilePath(), os.ModePerm)
+	err := file.IsNotExistMkdir(filePath)
 	if err != nil {
-		panic(err)
+		return nil, fmt.Errorf("file.IsNotExistMkDir src: %s, err: %v", filePath, err)
 	}
+
+	f, err := file.Open(filePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		return nil, fmt.Errorf("Fail to OpenFile: %v", err)
+	}
+
+	return f, nil
 }
