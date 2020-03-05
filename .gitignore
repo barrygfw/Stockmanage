@@ -1,3 +1,5 @@
 conf/app.ini
 runtime/logs/*
 .idea/
+
+uploads/

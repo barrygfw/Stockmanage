@@ -3,15 +3,18 @@ package routers
 import (
 	"graduationProjectPeng/middleware/jwt"
 	"graduationProjectPeng/pkg/setting"
+	"graduationProjectPeng/pkg/upload"
 	"graduationProjectPeng/routers/api"
 	"graduationProjectPeng/routers/api/category"
 	"graduationProjectPeng/routers/api/goods"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 func InitRouter(r *gin.Engine) {
 
+	r.StaticFS("/cdn/images", http.Dir(upload.GetImagePath()))
 	r.POST("/api/login", api.Login)
 	root := r.Group("/api")
 	if setting.AppSetting.CheckToken {
@@ -30,6 +33,10 @@ func InitRouter(r *gin.Engine) {
 			goodsApi.POST("/add", goods.AddGoods)
 			goodsApi.POST("/update", goods.UpdateGoods)
 			goodsApi.POST("/del", goods.DelGoods)
+		}
+		uploadApi := root.Group("/upload")
+		{
+			uploadApi.POST("/image", api.UploadImage)
 		}
 	}
 }

@@ -13,10 +13,16 @@ import (
 	"strings"
 )
 
+/**
+获取图片访问路径
+*/
 func GetImageFullUrl(name string) string {
-	return setting.AppSetting.ImagePrefixUrl + "/" + GetImagePath() + name
+	return setting.AppSetting.ImagePrefixUrl + "/cdn/images/" + name
 }
 
+/**
+获取文件名
+*/
 func GetImageName(name string) string {
 	ext := path.Ext(name)
 	fileName := strings.TrimSuffix(name, ext)
@@ -25,10 +31,16 @@ func GetImageName(name string) string {
 	return fileName + ext
 }
 
+/**
+获取图片保存路径
+*/
 func GetImagePath() string {
 	return setting.AppSetting.ImageSavePath
 }
 
+/**
+检查图片格式
+*/
 func CheckImageExt(fileName string) bool {
 	ext := file.GetExt(fileName)
 	for _, allowExt := range setting.AppSetting.ImageAllowExts {
@@ -40,24 +52,30 @@ func CheckImageExt(fileName string) bool {
 	return false
 }
 
+/**
+检查图片大小是否合法
+*/
 func CheckImageSize(f multipart.File) bool {
-	size, err := file.GetSize(f)
+	size, err := file.GetSize(f) //获取到的大小单位为字节
 	if err != nil {
 		log.Println(err)
 		logging.Warn(err)
 		return false
 	}
 
-	return size <= setting.AppSetting.ImageMaxSize
+	return size <= (setting.AppSetting.ImageMaxSize * 1048576)
 }
 
+/**
+检查图片
+*/
 func CheckImage(src string) error {
 	dir, err := os.Getwd()
 	if err != nil {
 		return fmt.Errorf("os.Getwn err: %v", err)
 	}
 
-	err = file.IsNotExistMkdir(dir + "/" + src)
+	err = file.IsNotExistMkDir(dir + "/" + src)
 	if err != nil {
 		return fmt.Errorf("file.IsNotExistMkDir err: %v", err)
 	}
