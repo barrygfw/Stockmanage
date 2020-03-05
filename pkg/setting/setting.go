@@ -8,13 +8,17 @@ import (
 )
 
 type App struct {
-	JwtSecret     string
-	JwtExpireTime time.Duration
-	CheckToken    bool
-	LogSavePath   string
-	LogSaveName   string
-	LogFileExt    string
-	LogTimeFormat string
+	JwtSecret      string
+	JwtExpireTime  time.Duration
+	CheckToken     bool
+	LogSavePath    string
+	LogSaveName    string
+	LogFileExt     string
+	LogTimeFormat  string
+	ImagePrefixUrl string
+	ImageSavePath  string
+	ImageMaxSize   int
+	ImageAllowExts []string
 }
 
 var AppSetting = &App{}
