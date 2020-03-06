@@ -24,12 +24,12 @@ func AddGoods(c *gin.Context) {
 	var goods goodsModel.Goods
 	//参数校验
 	if err := c.ShouldBindJSON(&goods); err != nil {
-		logging.Info(e.GetMsg(e.INVALID_PARAMS), err.Error())
+		logging.Warn(e.GetMsg(e.INVALID_PARAMS), err.Error())
 		common.Json_return(c, e.INVALID_PARAMS, err.Error())
 		return
 	}
 	if err := goodsService.InsertGoods(&goods); err != nil {
-		logging.Fatal(err.Error())
+		logging.Warn(err.Error())
 		common.Json_return(c, e.ERROR, err.Error())
 		return
 	}
@@ -50,12 +50,12 @@ func UpdateGoods(c *gin.Context) {
 	var goods goodsModel.Goods
 	//参数校验
 	if err := c.ShouldBindJSON(&goods); err != nil || goods.GoodsId == 0 {
-		logging.Info(e.GetMsg(e.INVALID_PARAMS), err.Error())
+		logging.Warn(e.GetMsg(e.INVALID_PARAMS), err.Error())
 		common.Json_return(c, e.INVALID_PARAMS, err.Error())
 		return
 	}
 	if err := goodsService.UpdateGoods(&goods); err != nil {
-		logging.Error(err.Error())
+		logging.Warn(err.Error())
 		common.Json_return(c, e.ERROR, err.Error())
 		return
 	}

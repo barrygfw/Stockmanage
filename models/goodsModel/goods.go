@@ -14,6 +14,7 @@ type Goods struct {
 	GoodsId    int    `json:"goods_id" gorm:"primary_key"`
 	Name       string `json:"name" binding:"required"`
 	CategoryId int    `json:"category_id" binding:"required"`
+	Icon       string `json:"icon"`
 	CreatedAt  int64
 	UpdatedAt  int64
 	Stock      int64 `json:"stock"`

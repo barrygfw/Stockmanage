@@ -28,7 +28,7 @@ func GetCate(c *gin.Context) {
 	child := c.Query("child")
 	data, err = categoryService.GetCategory(id, child)
 	if err != nil {
-		logging.Fatal(err.Error())
+		logging.Warn(err.Error())
 		common.Json_return(c, e.ERROR, err.Error())
 		return
 	}
@@ -47,12 +47,12 @@ params: json
 func AddCate(c *gin.Context) {
 	var cate categoryModel.Cate
 	if err := c.ShouldBindJSON(&cate); err != nil {
-		logging.Info(e.GetMsg(e.INVALID_PARAMS), err.Error())
+		logging.Warn(e.GetMsg(e.INVALID_PARAMS), err.Error())
 		common.Json_return(c, e.INVALID_PARAMS, err.Error())
 		return
 	}
 	if ok, errs := categoryService.AddCategory(&cate); !ok {
-		logging.Fatal(errs.Error())
+		logging.Warn(errs.Error())
 		common.Json_return(c, e.ERROR, errs.Error())
 		return
 	}
@@ -71,13 +71,13 @@ params : json
 func DelCate(c *gin.Context) {
 	var ids models.IdList
 	if err := c.ShouldBindJSON(&ids); err != nil || len(ids.Ids) < 1 {
-		logging.Info(e.GetMsg(e.INVALID_PARAMS), err.Error())
+		logging.Warn(e.GetMsg(e.INVALID_PARAMS), err.Error())
 		common.Json_return(c, e.INVALID_PARAMS, err.Error())
 		return
 	}
 	ok, err := categoryModel.DelCate(ids.Ids)
 	if !ok {
-		logging.Fatal(err.Error())
+		logging.Warn(err.Error())
 		common.Json_return(c, e.ERROR, err.Error())
 		return
 	}
@@ -98,12 +98,12 @@ func UpdateCate(c *gin.Context) {
 	var cate categoryModel.Cate
 
 	if err := c.ShouldBindJSON(&cate); err != nil || cate.Id == 0 || cate.Parent == 0 {
-		logging.Info(e.GetMsg(e.INVALID_PARAMS), err.Error())
+		logging.Warn(e.GetMsg(e.INVALID_PARAMS), err.Error())
 		common.Json_return(c, e.INVALID_PARAMS, err.Error())
 		return
 	}
 	if ok, err := categoryService.UpdateCategory(&cate); !ok {
-		logging.Fatal(err.Error())
+		logging.Warn(err.Error())
 		common.Json_return(c, e.ERROR, err.Error())
 		return
 	}
