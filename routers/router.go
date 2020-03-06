@@ -7,6 +7,7 @@ import (
 	"graduationProjectPeng/routers/api"
 	"graduationProjectPeng/routers/api/category"
 	"graduationProjectPeng/routers/api/goods"
+	"graduationProjectPeng/routers/api/inOutStock"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -33,6 +34,10 @@ func InitRouter(r *gin.Engine) {
 			goodsApi.POST("/add", goods.AddGoods)
 			goodsApi.POST("/update", goods.UpdateGoods)
 			goodsApi.POST("/del", goods.DelGoods)
+		}
+		inOutStockApi := root.Group("/stock")
+		{
+			inOutStockApi.POST("/inoutstock", inOutStock.GoodsInOutStock)
 		}
 		uploadApi := root.Group("/upload")
 		{

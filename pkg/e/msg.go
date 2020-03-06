@@ -13,6 +13,8 @@ var MsgFlags = map[int]string{
 	ERROR_UPLOAD_SAVE_IMAGE_FAIL:    "保存图片失败",
 	ERROR_UPLOAD_CHECK_IMAGE_FAIL:   "检查图片失败",
 	ERROR_UPLOAD_CHECK_IMAGE_FORMAT: "校验失败，请检查图片格式或大小",
+	ERROR_UPDATE_STOCK_FAIL:         "更新商品库存失败",
+	ERROR_ADD_INOUT_ROW_FAIL:        "添加出入库记录失败",
 }
 
 func GetMsg(code int) string {

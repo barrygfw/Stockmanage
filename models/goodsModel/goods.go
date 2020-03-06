@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"graduationProjectPeng/db"
 	"graduationProjectPeng/models/categoryModel"
+	"graduationProjectPeng/models/inOutStockModel"
 	"time"
 
 	"github.com/jinzhu/gorm"
@@ -32,11 +33,27 @@ func (goods *Goods) AddGoods() error {
 }
 
 /**
-更新商品
+更新商品基本信息
 */
 func (goods *Goods) UpdateGoods() error {
 	goods.UpdatedAt = time.Now().Unix()
 	return db.Db.Model(&Goods{}).Omit("stock").UpdateColumns(goods).Error
+}
+
+/**
+更新商品库存
+*/
+func UpdateStock(goodsId, inOutType int, num int64) error {
+	goods := Goods{}
+	if err := db.Db.Where("goods_id = ?", goodsId).Take(&goods).Error; err != nil {
+		return err
+	}
+	if inOutType == inOutStockModel.InputStock {
+		goods.Stock += num
+	} else {
+		goods.Stock -= num
+	}
+	return db.Db.Save(goods).Error
 }
 
 /**

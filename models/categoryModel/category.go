@@ -54,12 +54,12 @@ func AddCate(cate *Cate) (bool, error) {
 func DelCate(ids []*int) (bool, error) {
 	//开启事务
 	tx := db.Db.Begin()
-	if err := db.Db.Where("id in (?)", ids).Delete(&Cate{}).Error; err != nil {
+	if err := tx.Where("id in (?)", ids).Delete(&Cate{}).Error; err != nil {
 		//父分类删除失败，回滚
 		tx.Rollback()
 		return false, err
 	}
-	if err := db.Db.Where("parent in (?)", ids).Delete(&Cate{}).Error; err != nil {
+	if err := tx.Where("parent in (?)", ids).Delete(&Cate{}).Error; err != nil {
 		//子分类删除失败，回滚
 		tx.Rollback()
 		return false, err
