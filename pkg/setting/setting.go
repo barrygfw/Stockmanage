@@ -28,6 +28,7 @@ type Server struct {
 	HttpPort     int
 	ReadTimeout  time.Duration
 	WriteTimeout time.Duration
+	FilterHost   []string
 }
 
 var ServerSetting = &Server{}
