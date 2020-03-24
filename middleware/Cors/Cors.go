@@ -1,6 +1,8 @@
 package Cors
 
 import (
+	"fmt"
+	"graduationProjectPeng/pkg/logging"
 	"graduationProjectPeng/pkg/setting"
 	"net/http"
 	"regexp"
@@ -11,6 +13,7 @@ import (
 func Cors() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		method := c.Request.Method
+		fmt.Println(method)
 		origin := c.Request.Header.Get("Origin")
 		filterHost := setting.ServerSetting.FilterHost
 		var isAccess = false
@@ -24,7 +27,9 @@ func Cors() gin.HandlerFunc {
 			c.Header("Access-Control-Allow-Origin", "*")
 			c.Header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
 			c.Header("Access-Control-Allow-Methods", "GET, OPTIONS, POST, PUT, DELETE")
-			c.Set("Content-Type", "application/json")
+			//c.Set("Content-Type", "application/json")
+		} else {
+			logging.Warn(origin, "域名未通过验证")
 		}
 		//放行所有OPTIONS方法
 		if method == "OPTIONS" {

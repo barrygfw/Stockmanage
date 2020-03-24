@@ -12,7 +12,7 @@ type Cate struct {
 	Id     int     `json:"category_id" gorm:"primary_key"`
 	Parent int     `json:"parent_id"`
 	Name   string  `json:"name" binding:"required"`
-	Child  []*Cate `json:"child_cate"`
+	Child  []*Cate `json:"children"`
 }
 
 /**
