@@ -119,6 +119,10 @@ func existName(parent int, name string) (bool, error) {
 检查父级分类是否存在
 */
 func existParent(parent int) (bool, error) {
+	if parent == 0 {
+		//顶级分类
+		return true, nil
+	}
 	n := 0
 	if err := db.Db.Model(&Cate{}).Where("id = ?", parent).Count(&n).Error; err != nil {
 		return false, err

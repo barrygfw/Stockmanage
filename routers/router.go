@@ -1,6 +1,7 @@
 package routers
 
 import (
+	"graduationProjectPeng/middleware/Cors"
 	"graduationProjectPeng/middleware/jwt"
 	"graduationProjectPeng/pkg/setting"
 	"graduationProjectPeng/pkg/upload"
@@ -15,7 +16,7 @@ import (
 
 func InitRouter(r *gin.Engine) {
 
-	//r.Use(Cors.Cors())
+	r.Use(Cors.Cors())
 	r.StaticFS("/cdn/images", http.Dir(upload.GetImagePath()))
 	r.POST("/api/login", api.Login)
 	root := r.Group("/api")
