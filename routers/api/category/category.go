@@ -97,7 +97,7 @@ params : json
 func UpdateCate(c *gin.Context) {
 	var cate categoryModel.Cate
 
-	if err := c.ShouldBindJSON(&cate); err != nil || cate.Id == 0 || cate.Parent == 0 {
+	if err := c.ShouldBindJSON(&cate); err != nil {
 		logging.Warn(e.GetMsg(e.INVALID_PARAMS), err.Error())
 		common.Json_return(c, e.INVALID_PARAMS, err.Error())
 		return

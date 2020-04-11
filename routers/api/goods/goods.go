@@ -79,9 +79,22 @@ func DelGoods(c *gin.Context) {
 		return
 	}
 	if err := goodsService.DeleteGoods(goodsIds.Ids); err != nil {
-		logging.Error(err.Error())
+		logging.Warn(err.Error())
 		common.Json_return(c, e.ERROR, err.Error())
 		return
 	}
 	common.Json_return(c, e.SUCCESS, "")
+}
+
+func QueryGoods(c *gin.Context) {
+	data := make([]*goodsModel.Goods, 0)
+	var err error
+	categoryId := c.Query("categoryId")
+	goodsName := c.Query("goodsName")
+	if data, err = goodsService.QueryGoods(goodsName, categoryId); err != nil {
+		logging.Warn(err.Error())
+		common.Json_return(c, e.ERROR, err.Error())
+		return
+	}
+	common.Json_return(c, e.SUCCESS, data)
 }

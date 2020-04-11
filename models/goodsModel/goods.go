@@ -25,6 +25,21 @@ func (goods *Goods) BeforeCreate(scope *gorm.Scope) error {
 	return scope.SetColumn("createdAt", time.Now().Unix())
 }
 
+func QueryGoods(where map[string]string) (goods []*Goods, err error) {
+	db := db.Db
+	if _, ok := where["category_id"]; ok {
+		db = db.Where("category_id = ?", where["category_id"])
+	}
+	if _, ok := where["name"]; ok {
+		db = db.Where("name LIKE ?", "%"+where["name"]+"%")
+	}
+	err = db.Find(&goods).Error
+	if gorm.IsRecordNotFoundError(err) {
+		err = nil
+	}
+	return
+}
+
 /**
 新增商品
 */

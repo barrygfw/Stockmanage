@@ -38,6 +38,27 @@ func GetCateOr(maps interface{}, ormaps interface{}) (cate []*Cate, err error) {
 }
 
 /**
+获取所有分类
+ */
+func GetAllCate() (cates []*Cate, err error) {
+	err = db.Db.Find(&cates).Error
+	if gorm.IsRecordNotFoundError(err) {
+		err = nil
+	}
+	return
+}
+/**
+根据id获取分类
+ */
+func GetCateByIds(ids []*int) (cates []*Cate, err error) {
+	err = db.Db.Where("id in (?)", ids).Find(&cates).Error
+	if gorm.IsRecordNotFoundError(err) {
+		err = nil
+	}
+	return
+}
+
+/**
 插入category
 */
 func AddCate(cate *Cate) (bool, error) {

@@ -1,6 +1,8 @@
 package goodsService
 
-import "graduationProjectPeng/models/goodsModel"
+import (
+	"graduationProjectPeng/models/goodsModel"
+)
 
 /**
 新增商品
@@ -26,11 +28,25 @@ func UpdateGoods(goods *goodsModel.Goods) error {
 
 /**
 删除商品
- */
+*/
 func DeleteGoods(goodsIds []*int) error {
 	//数据检查
 	if err := goodsModel.ExistIds(goodsIds); err != nil {
 		return err
 	}
 	return goodsModel.DelGoods(goodsIds)
+}
+
+/**
+查询商品
+*/
+func QueryGoods(goodsName, categoryId string) ([]*goodsModel.Goods, error) {
+	where := make(map[string]string)
+	if categoryId != "" {
+		where["category_id"] = categoryId
+	}
+	if goodsName != "" {
+		where["name"] = goodsName
+	}
+	return goodsModel.QueryGoods(where)
 }

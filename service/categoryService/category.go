@@ -2,31 +2,70 @@ package categoryService
 
 import (
 	"graduationProjectPeng/models/categoryModel"
+	"strconv"
 )
 
 /**
 获取分类信息
 */
-func GetCategory(id, child string) (data []*categoryModel.Cate, err error) {
-	dataMap := make(map[int]map[int]*categoryModel.Cate)
-	cates := make([]*categoryModel.Cate, 0)
-	maps := make(map[string]interface{})
-	if id == "" {
-		cates, err = categoryModel.GetcateAnd(maps)
+func GetCategory(idStr, child string) ([]*categoryModel.Cate, error) {
+	var index int
+	if idStr == "" {
+		index = 0
 	} else {
-		maps["id"] = id
-		ormaps := make(map[string]interface{})
-		if child != "" {
-			ormaps["parent"] = id
+		id, _ := strconv.Atoi(idStr)
+		if child == "" {
+			ids := make([]*int, 0)
+			ids = append(ids, &id)
+			cates, err := categoryModel.GetCateByIds(ids)
+			if err != nil {
+				return cates, err
+			}
+			return cates, nil
 		}
-		cates, err = categoryModel.GetCateOr(maps, ormaps)
+		index = id
 	}
+	return getAllChildCates(index)
+}
+
+/**
+根据id获取分类及其子分类
+id 为0时获取所有分类
+*/
+func getAllChildCates(parentId int) ([]*categoryModel.Cate, error) {
+	allCates, err := categoryModel.GetAllCate()
 	if err != nil {
-		return data, err
+		return allCates, err
 	}
-	dataMap = initCate(cates)
-	data = dfsCate(dataMap, 0)
+	dataMap := initCate(allCates)
+	if parentId != 0 {
+		ids := make([]*int, 0)
+		ids = append(ids, &parentId)
+		cates, err := categoryModel.GetCateByIds(ids)
+		if err != nil {
+			return cates, err
+		}
+		cates[0].Child = dfsCate(dataMap, parentId)
+		return cates, nil
+	}
+	data := dfsCate(dataMap, parentId)
 	return data, nil
+}
+
+/**
+获取所有分类id
+ */
+func getCateIds(cates []*categoryModel.Cate) ([]*int, error) {
+	ids := make([]*int, 0)
+	for _, cate := range cates {
+		ids = append(ids, &cate.Id)
+		if cate.Child != nil {
+			if childIds, err := getCateIds(cate.Child); err == nil {
+				ids = append(ids, childIds...)
+			}
+		}
+	}
+	return ids, nil
 }
 
 /**

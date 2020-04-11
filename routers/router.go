@@ -36,6 +36,7 @@ func InitRouter(r *gin.Engine) {
 			goodsApi.POST("/add", goods.AddGoods)
 			goodsApi.POST("/update", goods.UpdateGoods)
 			goodsApi.POST("/del", goods.DelGoods)
+			goodsApi.GET("/query", goods.QueryGoods)
 		}
 		inOutStockApi := root.Group("/stock")
 		{
