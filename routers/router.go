@@ -9,6 +9,7 @@ import (
 	"graduationProjectPeng/routers/api/category"
 	"graduationProjectPeng/routers/api/goods"
 	"graduationProjectPeng/routers/api/inOutStock"
+	"graduationProjectPeng/routers/api/toDoList"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -45,6 +46,13 @@ func InitRouter(r *gin.Engine) {
 		uploadApi := root.Group("/upload")
 		{
 			uploadApi.POST("/image", api.UploadImage)
+		}
+		toDoListApi := root.Group("/todo")
+		{
+			toDoListApi.POST("/add", toDoList.AddTodo)
+			toDoListApi.POST("/update", toDoList.UptTodo)
+			toDoListApi.POST("/del", toDoList.DelTodo)
+			toDoListApi.GET("/query", toDoList.Query)
 		}
 	}
 }
