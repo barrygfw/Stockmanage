@@ -1,6 +1,7 @@
 package goodsService
 
 import (
+	"graduationProjectPeng/models/categoryModel"
 	"graduationProjectPeng/models/goodsModel"
 )
 
@@ -48,5 +49,24 @@ func QueryGoods(goodsName, categoryId string) ([]*goodsModel.Goods, error) {
 	if goodsName != "" {
 		where["name"] = goodsName
 	}
-	return goodsModel.QueryGoods(where)
+	goodsList, err := goodsModel.QueryGoods(where)
+	if err != nil {
+		return goodsList, err
+	}
+	cateIdList := make([]*int, 0)
+	for _, goods := range goodsList {
+		cateIdList = append(cateIdList, &goods.CategoryId)
+	}
+	catesList, err := categoryModel.GetCateByIds(cateIdList)
+	if err != nil {
+		return goodsList, err
+	}
+	cateIdNameMap := make(map[int]string, 0)
+	for _, cate := range catesList {
+		cateIdNameMap[cate.Id] = cate.Name
+	}
+	for index, _ := range goodsList {
+		goodsList[index].CategoryName = cateIdNameMap[goodsList[index].CategoryId]
+	}
+	return goodsList, nil
 }
