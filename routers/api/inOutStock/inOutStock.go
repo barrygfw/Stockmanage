@@ -18,7 +18,6 @@ params : json
 	"type": 1,
 	"goods_id", 1,
 	"num", 1000,
-	"category_id", 1,
 	"comment": "从xx厂进货1000件"
 }
 */

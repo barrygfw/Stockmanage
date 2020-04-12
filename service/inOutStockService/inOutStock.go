@@ -27,6 +27,7 @@ func AddInOutStockRow(stock *inOutStockModel.InoutStock) (bool, int) {
 	if err := tx.Save(goods).Error; err != nil {
 		return false, e.ERROR_UPDATE_STOCK_FAIL
 	}
+	stock.CategoryId = goods.CategoryId
 	if err := tx.Create(stock).Error; err != nil {
 		return false, e.ERROR_ADD_INOUT_ROW_FAIL
 	}

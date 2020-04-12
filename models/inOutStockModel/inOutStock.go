@@ -12,7 +12,7 @@ type InoutStock struct {
 	Type       int    `json:"type" binding:"required"`
 	GoodsId    int    `json:"goods_id" binding:"required"`
 	Num        int64  `json:"num" binding:"required"`
-	CategoryId int    `json:"category_id" binding:"required"`
+	CategoryId int    `json:"category_id"`
 	Comment    string `json:"comment" binding:"required"`
 	CreatedAt  int64
 }
