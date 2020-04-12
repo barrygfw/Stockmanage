@@ -86,6 +86,15 @@ func DelGoods(c *gin.Context) {
 	common.Json_return(c, e.SUCCESS, "")
 }
 
+/**
+查询商品
+api: /api/goods/query
+params: Query
+{
+	"categoryId": 1, //非必须,分类id
+	"goodsName": "鞋" //非必须, 商品名称, 支持模糊搜索
+}
+*/
 func QueryGoods(c *gin.Context) {
 	data := make([]*goodsModel.Goods, 0)
 	var err error
