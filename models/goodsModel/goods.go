@@ -12,14 +12,14 @@ import (
 )
 
 type Goods struct {
-	GoodsId    int    `json:"goods_id" gorm:"primary_key"`
-	Name       string `json:"name" binding:"required"`
-	CategoryId int    `json:"category_id" binding:"required"`
-	CategoryName string `json:"category_name"`
-	Icon       string `json:"icon"`
-	CreatedAt  int64
-	UpdatedAt  int64
-	Stock      int64 `json:"stock"`
+	GoodsId      int    `json:"goods_id" gorm:"primary_key"`
+	Name         string `json:"name" binding:"required"`
+	CategoryId   int    `json:"category_id" binding:"required"`
+	CategoryName string `sql:"-" json:"category_name"`
+	Icon         string `json:"icon"`
+	CreatedAt    int64
+	UpdatedAt    int64
+	Stock        int64 `json:"stock"`
 }
 
 func (goods *Goods) BeforeCreate(scope *gorm.Scope) error {
@@ -90,7 +90,6 @@ func (goods *Goods) CheckGoods(option string) error {
 		if err := ExistIds(ids); err != nil {
 			return err
 		}
-		fallthrough
 	case "insert":
 		if err := existGoods(goods.CategoryId, goods.Name); err != nil {
 			return err

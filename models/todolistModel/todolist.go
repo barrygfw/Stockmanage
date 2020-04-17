@@ -25,6 +25,8 @@ type Todolist struct {
 
 func (Todo *Todolist) AddToDo() error {
 	Todo.CreatedAt = time.Now().Unix()
+	Todo.UpdatedAt = time.Now().Unix()
+	Todo.Status = 2
 	return db.Db.Create(Todo).Error
 }
 
