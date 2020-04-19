@@ -79,6 +79,14 @@ func DelGoods(goodsIds []*int) error {
 	return db.Db.Where("goods_id in (?)", goodsIds).Delete(&Goods{}).Error
 }
 
+func GetGoodsByIds(goodsIds []*int) (data []*Goods, err error) {
+	err = db.Db.Where("goods_id in (?)", goodsIds).Find(&data).Error
+	if gorm.IsRecordNotFoundError(err) {
+		err = nil
+	}
+	return
+}
+
 /**
 相关数据检查
 */

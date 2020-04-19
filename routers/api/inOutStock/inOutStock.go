@@ -1,6 +1,7 @@
 package inOutStock
 
 import (
+	"graduationProjectPeng/models"
 	"graduationProjectPeng/models/inOutStockModel"
 	"graduationProjectPeng/pkg/e"
 	"graduationProjectPeng/pkg/logging"
@@ -45,4 +46,25 @@ func GoodsInOutStock(c *gin.Context) {
 	}
 	logging.Info(inOutStock)
 	common.Json_return(c, e.SUCCESS, "")
+}
+
+func QueryInoutList(c *gin.Context) {
+	var param models.InoutListParam
+	if err := c.ShouldBindQuery(&param); err != nil {
+		logging.Warn(err.Error())
+		common.Json_return(c, e.INVALID_PARAMS, "")
+		return
+	}
+	if param.Type != 0 && param.Type != inOutStockModel.InputStock && param.Type != inOutStockModel.OutputStock {
+		logging.Warn("出入库类型参数错误")
+		common.Json_return(c, e.INVALID_PARAMS, "")
+		return
+	}
+	data, err := inOutStockService.QueryInoutStockList(&param)
+	if err != nil {
+		logging.Warn(err.Error())
+		common.Json_return(c, e.ERROR, "")
+		return
+	}
+	common.Json_return(c, e.SUCCESS, data)
 }
