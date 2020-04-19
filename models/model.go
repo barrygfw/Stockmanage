@@ -16,3 +16,7 @@ type InoutListParam struct {
 	Type    int `json:"type" form:"type"`
 	Id      int   `json:"id" form:"id"`
 }
+
+type InventoryListParam struct {
+	InoutListParam
+}

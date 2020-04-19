@@ -2,11 +2,13 @@ package inOutStock
 
 import (
 	"graduationProjectPeng/models"
+	"graduationProjectPeng/models/InventoryModel"
 	"graduationProjectPeng/models/inOutStockModel"
 	"graduationProjectPeng/pkg/e"
 	"graduationProjectPeng/pkg/logging"
 	"graduationProjectPeng/service/common"
 	"graduationProjectPeng/service/inOutStockService"
+	"graduationProjectPeng/service/inventoryService"
 
 	"github.com/gin-gonic/gin"
 )
@@ -61,6 +63,48 @@ func QueryInoutList(c *gin.Context) {
 		return
 	}
 	data, err := inOutStockService.QueryInoutStockList(&param)
+	if err != nil {
+		logging.Warn(err.Error())
+		common.Json_return(c, e.ERROR, "")
+		return
+	}
+	common.Json_return(c, e.SUCCESS, data)
+}
+
+func StockInventory(c *gin.Context) {
+	var param InventoryModel.Inventory
+	if err := c.ShouldBindJSON(&param); err != nil {
+		logging.Warn(err.Error())
+		common.Json_return(c, e.INVALID_PARAMS, nil)
+		return
+	}
+	if param.Type != InventoryModel.PANYING && param.Type != InventoryModel.LOSE && param.Type != InventoryModel.NORMAL {
+		logging.Warn("盘点结果类型参数错误", param.Type)
+		common.Json_return(c, e.INVALID_PARAMS, nil)
+		return
+	}
+	if err := inventoryService.AddInventory(&param); err != nil {
+		logging.Warn(err.Error(), param)
+		common.Json_return(c, e.ERROR, nil)
+		return
+	}
+	logging.Info(param)
+	common.Json_return(c, e.SUCCESS, nil)
+}
+
+func QueryInventory(c *gin.Context) {
+	var param models.InventoryListParam
+	if err := c.ShouldBindQuery(&param); err != nil {
+		logging.Warn(err.Error())
+		common.Json_return(c, e.INVALID_PARAMS, "")
+		return
+	}
+	if param.Type != 0 && param.Type != InventoryModel.PANYING && param.Type != InventoryModel.LOSE && param.Type != InventoryModel.NORMAL {
+		logging.Warn("盘点结果类型参数错误", param.Type)
+		common.Json_return(c, e.INVALID_PARAMS, nil)
+		return
+	}
+	data, err := inventoryService.QueryInventoryList(&param)
 	if err != nil {
 		logging.Warn(err.Error())
 		common.Json_return(c, e.ERROR, "")

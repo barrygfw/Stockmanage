@@ -43,6 +43,8 @@ func InitRouter(r *gin.Engine) {
 		{
 			inOutStockApi.POST("/inoutstock", inOutStock.GoodsInOutStock)
 			inOutStockApi.GET("/inoutlist", inOutStock.QueryInoutList)
+			inOutStockApi.POST("/inventory", inOutStock.StockInventory)
+			inOutStockApi.GET("/inventorylist", inOutStock.QueryInventory)
 		}
 		uploadApi := root.Group("/upload")
 		{
